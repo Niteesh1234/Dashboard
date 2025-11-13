@@ -1,8 +1,0 @@
-{
-  "build": {
-    "builder": "docker-compose"
-  },
-  "deploy": {
-    "startCommand": "docker-compose up"
-  }
-}
