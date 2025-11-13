@@ -8,8 +8,7 @@ const kafka = new Kafka({
 
 const consumer = kafka.consumer({ groupId: 'cdc-group-new' });
 
-const mongoUrl = process.env.MONGODB_URL || 'mongodb://admin:password@mongodb:27017/?authSource=admin';
-const mongoClient = new MongoClient(mongoUrl);
+const mongoClient = new MongoClient('mongodb://admin:password@mongodb:27017/?authSource=admin');
 
 async function run() {
   await consumer.connect();
@@ -40,11 +39,11 @@ async function run() {
           // Fetch joined data from MySQL
           const mysql = require('mysql2/promise');
           const mysqlConnection = await mysql.createConnection({
-            host: process.env.MYSQL_HOST || 'mysql',
-            port: process.env.MYSQL_PORT || 3306,
-            user: process.env.MYSQL_USER || 'cdc_user',
-            password: process.env.MYSQL_PASSWORD || 'cdc_password',
-            database: process.env.MYSQL_DATABASE || 'orders'
+            host: 'mysql',
+            port: 3306,
+            user: 'cdc_user',
+            password: 'cdc_password',
+            database: 'orders'
           });
 
           const [rows] = await mysqlConnection.execute(`

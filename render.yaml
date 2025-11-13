@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: api
+    runtime: docker
+    dockerfilePath: Dockerfile.api
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: MYSQL_HOST
+        sync: false
+      - key: MYSQL_USER
+        sync: false
+      - key: MYSQL_PASSWORD
+        sync: false
+      - key: MYSQL_DATABASE
+        sync: false
+    healthCheckPath: /api/stats/summary
+
+  - type: web
+    name: dashboard
+    runtime: docker
+    dockerfilePath: Dockerfile.dashboard
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: API_URL
+        fromService:
+          type: web
+          name: api
+          property: host
+    routes:
+      - type: web
+        index: /
+        spa: false

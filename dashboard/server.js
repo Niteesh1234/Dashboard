@@ -11,9 +11,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// Connect to MongoDB
-const mongoUrl = process.env.MONGODB_URL || 'mongodb://admin:password@mongodb:27017/orders_db?authSource=admin';
-mongoose.connect(mongoUrl).then(() => {
+// Connect to MongoDB (Atlas in production, local in development)
+const mongoUri = process.env.MONGODB_URI || 'mongodb://admin:password@mongodb:27017/orders_db?authSource=admin';
+mongoose.connect(mongoUri).then(() => {
   console.log('Connected to MongoDB');
 }).catch(err => {
   console.error('MongoDB connection error:', err);
@@ -49,9 +49,10 @@ const Transaction = mongoose.model('Transaction', transactionSchema);
 app.get('/', async (req, res) => {
   try {
     // Fetch all transactions from API
+    const apiUrl = process.env.API_URL || 'http://api:3000';
     const [transactionsResponse, summaryResponse] = await Promise.all([
-      fetch('http://api:3000/api/transactions'),
-      fetch('http://api:3000/api/stats/summary')
+      fetch(`${apiUrl}/api/transactions`),
+      fetch(`${apiUrl}/api/stats/summary`)
     ]);
 
     const transactions = await transactionsResponse.json();
@@ -95,7 +96,8 @@ app.get('/', async (req, res) => {
 app.get('/data', async (req, res) => {
   try {
     // Fetch all transactions from API
-    const apiResponse = await fetch('http://api:3000/api/transactions');
+    const apiUrl = process.env.API_URL || 'http://api:3000';
+    const apiResponse = await fetch(`${apiUrl}/api/transactions`);
     const transactions = await apiResponse.json();
 
     const totalTransactions = transactions.length;
