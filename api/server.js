@@ -7,11 +7,11 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: 'mysql',
-  port: 3306,
-  user: 'root',
-  password: 'rootpassword',
-  database: 'orders'
+  host: process.env.MYSQL_HOST || 'mysql',
+  port: process.env.MYSQL_PORT || 3306,
+  user: process.env.MYSQL_USER || 'root',
+  password: process.env.MYSQL_PASSWORD || 'rootpassword',
+  database: process.env.MYSQL_DATABASE || 'orders'
 });
 
 db.connect((err) => {

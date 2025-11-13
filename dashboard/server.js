@@ -12,7 +12,8 @@ app.use((req, res, next) => {
 });
 
 // Connect to MongoDB
-mongoose.connect('mongodb://admin:password@mongodb:27017/orders_db?authSource=admin').then(() => {
+const mongoUrl = process.env.MONGODB_URL || 'mongodb://admin:password@mongodb:27017/orders_db?authSource=admin';
+mongoose.connect(mongoUrl).then(() => {
   console.log('Connected to MongoDB');
 }).catch(err => {
   console.error('MongoDB connection error:', err);

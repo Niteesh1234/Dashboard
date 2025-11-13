@@ -1,0 +1,45 @@
+version: '3.8'
+
+# Simplified version for Railway free tier
+# Only includes core services: API and Dashboard
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=production
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/transactions"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT:-3001}:3001"
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URL=${MONGODB_URL}
+    depends_on:
+      - api
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+# Note: Railway provides MySQL and MongoDB databases automatically
+# No need to define them in docker-compose.yml
+# Use Railway environment variables instead

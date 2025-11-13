@@ -4,12 +4,12 @@ services:
   mysql:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: orders
-      MYSQL_USER: cdc_user
-      MYSQL_PASSWORD: cdc_password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-orders}
+      MYSQL_USER: ${MYSQL_USER:-cdc_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-cdc_password}
     ports:
-      - "3306:3306"
+      - "${MYSQL_PORT:-3306}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./docker/mysql-init:/docker-entrypoint-initdb.d
@@ -22,10 +22,10 @@ services:
   mongodb:
     image: mongo:5.0
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-password}
     ports:
-      - "27017:27017"
+      - "${MONGODB_PORT:-27017}:27017"
     volumes:
       - mongodb_data:/data/db
 
